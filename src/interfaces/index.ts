@@ -1,4 +1,5 @@
 export * from './auth'
 export * from './car'
+export * from './post'
 export * from './request'
 export * from './user'

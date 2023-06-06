@@ -8,4 +8,4 @@ const PostSchema = new Schema<Post>({
   }
 })
 
-const PostModel = model('posts', PostSchema)
+export const PostModel = model('posts', PostSchema)

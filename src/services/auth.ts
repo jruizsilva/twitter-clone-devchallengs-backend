@@ -1,16 +1,23 @@
+import createHttpError from 'http-errors'
 import { Auth, User } from '../interfaces'
 import { UserModel } from '../models/user'
 import { encrypt, verified } from '../utils/bcrypt.handle'
 import { generateToken } from '../utils/jwt.handle'
+import { signAccessToken, signRefreshToken } from '../utils/jwt'
 
-const registerUser = async (user: User) => {
-  const existsUser = await UserModel.findOne({
-    email: user.email
-  })
-  if (existsUser) return 'ALREADY_USER'
-  user.password = await encrypt(user.password)
-  const newUser = await UserModel.create(user)
-  return newUser
+const registerUser = async (result: User) => {
+  const doesExist = await UserModel.findOne({ email: result.email })
+  if (doesExist) {
+    throw createHttpError.Conflict(
+      `${result.email} is already registered`
+    )
+  }
+  const user = new UserModel(result)
+  const savedUser = await user.save()
+  const accessToken = await signAccessToken(user.id)
+  const refreshToken = await signRefreshToken(user.id)
+
+  return { accessToken, refreshToken }
 }
 
 const loginUser = async (authUser: Auth) => {

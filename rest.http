@@ -1,3 +1,20 @@
 @BASE_URL=http://localhost:3001
 
-GET {{BASE_URL}}/dasd
+GET {{BASE_URL}}
+
+### *Register
+GET {{BASE_URL}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "correo@correo.com",
+  "password": 123456
+}
+### *Login
+GET {{BASE_URL}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "correo@correo.com",
+  "password": 123456
+}

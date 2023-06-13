@@ -6,4 +6,10 @@ const dbConnect = async () => {
   await connect(DB_URI)
 }
 
-export { dbConnect }
+dbConnect()
+  .then(() => {
+    console.log('Db Connected')
+  })
+  .catch(() => {
+    console.log('DB Not connected')
+  })

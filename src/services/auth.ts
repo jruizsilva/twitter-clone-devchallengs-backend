@@ -1,9 +1,8 @@
 import createHttpError from 'http-errors'
 import { Auth, User } from '../interfaces'
-import { UserModel } from '../models/user'
-import { encrypt, verified } from '../utils/bcrypt.handle'
-import { generateToken } from '../utils/jwt.handle'
-import { signAccessToken, signRefreshToken } from '../utils/jwt'
+import { UserModel } from '../models/User'
+import { encrypt, verified } from '../utils/bcrypt.util'
+import { signAccessToken, signRefreshToken } from '../utils/jwt.util'
 
 const registerUser = async (result: User) => {
   const doesExist = await UserModel.findOne({ email: result.email })
@@ -21,19 +20,7 @@ const registerUser = async (result: User) => {
 }
 
 const loginUser = async (authUser: Auth) => {
-  const user = await UserModel.findOne({
-    email: authUser.email
-  })
-  if (!user) return 'USER_NOT_FOUND'
-
-  const passwordEncrypted = user.password
-  const isCorrectPassword = await verified(
-    authUser.password,
-    passwordEncrypted
-  )
-  if (!isCorrectPassword) return 'PASSWORD_INCORRECT'
-  const token = await generateToken(user.email)
-  return { token }
+  return authUser
 }
 
 export { registerUser, loginUser }

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import * as authService from '../services/auth'
-import { authSchema } from '../utils/validation-schema'
+import { authSchema } from '../utils/validation-schema.util'
 import createHttpError from 'http-errors'
 
 const register = async (req: Request, res: Response) => {

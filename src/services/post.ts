@@ -1,5 +1,5 @@
 import { Post } from '../interfaces'
-import { PostModel } from '../models/post'
+import { PostModel } from '../models/Post'
 
 const insertPost = async (post: Post) => {
   const response = await PostModel.create(post)

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { handleHttp } from '../utils/error.handle'
+import { handleHttp } from '../utils/error.util'
 import * as postService from '../services/post'
 
 const getPosts = async (req: Request, res: Response) => {

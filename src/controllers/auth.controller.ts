@@ -1,28 +1,13 @@
 import { Request, Response } from 'express'
 import * as authService from '../services/auth'
-import { authSchema } from '../utils/validation-schema.util'
 import createHttpError from 'http-errors'
+import { registerValidation } from '../libs/joi'
+import { User } from '../interfaces'
 
 const register = async (req: Request, res: Response) => {
-  const { email, password, name, description } = req.body
-
-  const result = await authSchema.validateAsync({
-    email,
-    password,
-    name,
-    description
-  })
-
-  if (!email || !password || !name || !description) {
-    throw createHttpError.BadRequest()
-  }
-
-  const response = await authService.registerUser({
-    email: result.email,
-    password: result.password,
-    name: result.name,
-    description: result.description
-  })
+  const { value, error } = registerValidation(req.body)
+  if (error) createHttpError.BadRequest(error.message)
+  const response = await authService.registerUser(value as User)
   res.send(response)
 }
 

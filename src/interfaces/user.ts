@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import jwt from 'jsonwebtoken'
+import { Document } from 'mongoose'
 
 export interface Auth {
   email: string
@@ -17,4 +18,5 @@ export interface RequestExtended extends Request {
 export interface User extends Auth {
   name: string
   description: string
+  isValidPassword: (password: string) => boolean
 }

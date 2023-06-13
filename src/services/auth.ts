@@ -4,15 +4,15 @@ import { UserModel } from '../models/User'
 import { encrypt, verified } from '../utils/bcrypt.util'
 import { signAccessToken, signRefreshToken } from '../utils/jwt.util'
 
-const registerUser = async (result: User) => {
-  const doesExist = await UserModel.findOne({ email: result.email })
+const registerUser = async (data: User) => {
+  const doesExist = await UserModel.findOne({ email: data.email })
   if (doesExist) {
     throw createHttpError.Conflict(
-      `${result.email} is already registered`
+      `${data.email} is already registered`
     )
   }
-  const user = new UserModel(result)
-  const savedUser = await user.save()
+  const user = new UserModel(data)
+  await user.save()
   const accessToken = await signAccessToken(user.id)
   const refreshToken = await signRefreshToken(user.id)
 

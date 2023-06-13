@@ -46,7 +46,6 @@ UserSchema.methods.isValidPassword = async function (
   password: string
 ) {
   try {
-    console.log(this.id)
     return await bcrypt.compare(password, this.password)
   } catch (error) {
     throw error

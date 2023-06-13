@@ -14,7 +14,6 @@ const signAccessToken = (userId: string) => {
     }
     jwt.sign(payload, secret, options, (err, token) => {
       if (err) {
-        console.log(err.message)
         return reject(createHttpError.InternalServerError())
       }
       return resolve(token)
@@ -58,7 +57,6 @@ const signRefreshToken = (userId: string) => {
     }
     jwt.sign(payload, secret, options, async (err, token) => {
       if (err) {
-        console.log(err.message)
         return reject(createHttpError.InternalServerError())
       }
       try {
@@ -67,7 +65,6 @@ const signRefreshToken = (userId: string) => {
         // })
         return resolve(token)
       } catch (err: any) {
-        console.log(err.message)
         return reject(createHttpError.InternalServerError())
       }
     })
@@ -90,7 +87,6 @@ const verifyRefreshToken = (refreshToken: string) => {
       }
       return reject(createHttpError.Unauthorized())
     } catch (err) {
-      console.log(err)
       return reject(createHttpError.InternalServerError())
     }
   })

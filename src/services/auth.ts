@@ -1,8 +1,7 @@
 import createHttpError from 'http-errors'
 import { Auth, User } from '../interfaces'
 import { UserModel } from '../models/User'
-import { encrypt, verified } from '../utils/bcrypt.util'
-import { signAccessToken, signRefreshToken } from '../utils/jwt.util'
+import { signAccessToken, signRefreshToken } from '../utils/jwt'
 
 const registerUser = async (data: User) => {
   const doesExist = await UserModel.findOne({ email: data.email })

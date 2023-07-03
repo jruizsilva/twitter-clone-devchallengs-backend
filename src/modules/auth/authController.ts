@@ -5,7 +5,7 @@ const register = (req: Request, res: Response) => {
 }
 
 const login = (req: Request, res: Response) => {
-  res.send('updateUser')
+  res.send('login')
 }
 
 export const authController = {

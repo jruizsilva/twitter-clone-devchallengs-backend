@@ -1,21 +1,24 @@
-import { Schema, model, Document } from 'mongoose'
+import { Schema, model, Document, Model } from 'mongoose'
 
-export interface PostInput {
+export interface IPost {
   content: string
 }
 
-export interface PostDocument extends PostInput, Document {
+export interface IPostDocument extends IPost, Document {
   createdAt: Date
   updatedAt: Date
 }
-export interface PostResponse {
+export interface IPostResponse {
   id: string
   content: string
   createdAt: Date
   updatedAt: Date
 }
+interface IPostModel extends Model<IPostDocument> {
+  buildPost(post: IPost): IPostDocument
+}
 
-const PostSchema = new Schema(
+const PostSchema: Schema<IPostDocument> = new Schema(
   {
     content: {
       type: String,
@@ -28,4 +31,9 @@ const PostSchema = new Schema(
   }
 )
 
-export const PostModel = model<PostDocument>('posts', PostSchema)
+export const Post = model<IPostDocument, IPostModel>(
+  'posts',
+  PostSchema
+)
+
+export default Post

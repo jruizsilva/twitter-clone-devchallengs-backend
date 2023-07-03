@@ -3,8 +3,6 @@ import { postController } from './postController'
 
 const postRouter = Router()
 
-postRouter.param('id', postController.checkId)
-
 postRouter
   .route('/posts')
   .get(postController.getPosts)

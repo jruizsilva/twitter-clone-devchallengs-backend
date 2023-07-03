@@ -1,25 +1,28 @@
-import { Schema, model } from 'mongoose'
+import { Model, Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
 
-export interface UserInput {
+export interface IUser {
   email: string
   password: string
   name: string
   description?: string
-  isValidPassword: (password: string) => boolean
 }
-export type AuthInput = Pick<UserInput, 'email' | 'password'>
-export interface UserDocument extends UserInput, Document {
-  createdAt: Date
-  updatedAt: Date
+export type IUserAuth = Pick<IUser, 'email' | 'password'>
+export interface IUserDocument extends IUser, Document {
+  // createdAt: Date
+  // updatedAt: Date
+  isValidPassword(password: string): Promise<boolean>
+}
+interface IUserModel extends Model<IUserDocument> {
+  buildUser(user: IUser): IUserDocument
 }
 export interface UserResponse {
-  user: UserInput
+  user: IUser
   token: string
   refreshToken: string
 }
 
-const UserSchema = new Schema(
+const UserSchema: Schema<IUserDocument> = new Schema(
   {
     name: {
       type: String,
@@ -46,17 +49,17 @@ const UserSchema = new Schema(
   }
 )
 
-// UserSchema.pre('save', async function (next) {
-//   try {
-//     const salt = await bcrypt.genSalt(10)
-//     const hashedPassword = await bcrypt.hash(this.password, salt)
-//     this.password = hashedPassword
+UserSchema.pre('save', async function (next) {
+  try {
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(this.password, salt)
+    this.password = hashedPassword
 
-//     next()
-//   } catch (error: any) {
-//     next(error)
-//   }
-// })
+    next()
+  } catch (error: any) {
+    next(error)
+  }
+})
 
 UserSchema.methods.isValidPassword = async function (
   password: string
@@ -68,6 +71,12 @@ UserSchema.methods.isValidPassword = async function (
   }
 }
 
-export const UserModel = model<UserDocument>('users', UserSchema)
+UserSchema.statics.buildUser = (user: IUser) => {
+  return new User(user)
+}
 
-export default UserModel
+export const User = model<IUserDocument, IUserModel>(
+  'users',
+  UserSchema
+)
+export default User

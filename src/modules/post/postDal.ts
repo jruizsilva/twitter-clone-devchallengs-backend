@@ -1,14 +1,15 @@
-import { PostInput, PostModel } from '../../models/PostModel'
+import { IPost, Post } from '../../models/PostModel'
 
-const getPosts = () => {}
-const getPostById = () => {}
-const addPost = async (post: PostInput) => {
-  const docPost = await PostModel.create(post)
-  return docPost.toObject()
-}
+const getPosts = () => Post.find()
+const getPostById = (postId: string) => Post.findById(postId)
+const addPost = (post: IPost) => Post.create(post)
 
-const updatePost = () => {}
-const deletePost = () => {}
+const updatePost = (postId: string, data: IPost) =>
+  Post.findByIdAndUpdate(postId, data, {
+    new: true,
+    runValidators: true
+  }).lean()
+const deletePost = (postId: string) => Post.findByIdAndDelete(postId)
 
 export const postDal = {
   getPosts,

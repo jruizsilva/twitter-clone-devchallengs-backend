@@ -1,7 +1,7 @@
 import { postDto } from './postDto'
 import { NextFunction, Request, Response } from 'express'
 import { postService } from './postService'
-import { PostInput } from '../../models/PostModel'
+import { IPost } from '../../models/PostModel'
 
 const checkId = (
   req: Request,
@@ -13,19 +13,43 @@ const checkId = (
 
   next()
 }
-const getPosts = (req: Request, res: Response) => {
-  res.send('getUsers')
+const getPosts = async (req: Request, res: Response) => {
+  try {
+    const docPosts = await postService.getPosts()
+    console.dir(docPosts)
+    res.status(200).json({
+      status: 'success',
+      data: postDto.manyPosts(docPosts)
+    })
+  } catch (error: any) {
+    res.status(400).json({
+      status: 400,
+      message: error.message || 'Error getPosts'
+    })
+  }
 }
-const getPostById = (req: Request, res: Response) => {
-  res.send('getUserById')
+const getPostById = async (req: Request, res: Response) => {
+  try {
+    const docPost = await postService.getPostById(req.params.id)
+    console.dir(docPost)
+    res.status(200).json({
+      status: 'success',
+      data: docPost
+    })
+  } catch (error: any) {
+    res.status(400).json({
+      status: 400,
+      message: error.message || 'Error getPostById'
+    })
+  }
 }
 const addPost = async (req: Request, res: Response) => {
-  const { content } = req.body as PostInput
+  const { content } = req.body as IPost
   try {
-    const postCreated = await postService.addPost({ content })
+    const docPost = await postService.addPost({ content })
     res.status(201).json({
       status: 'success',
-      data: postDto.onePost(postCreated)
+      data: postDto.onePost(docPost)
     })
   } catch (error: any) {
     res.status(400).json({
@@ -34,11 +58,37 @@ const addPost = async (req: Request, res: Response) => {
     })
   }
 }
-const updatePost = (req: Request, res: Response) => {
-  res.send('updateUser')
+const updatePost = async (req: Request, res: Response) => {
+  try {
+    const { content } = req.body as IPost
+    const docPost = await postService.updatePost(req.params.id, {
+      content
+    })
+    console.log(docPost)
+    res.status(200).json({
+      status: 'success',
+      data: docPost
+    })
+  } catch (error: any) {
+    res.status(400).json({
+      status: 400,
+      message: error.message || 'Error updatePost'
+    })
+  }
 }
-const deletePost = (req: Request, res: Response) => {
-  res.send('deleteUser')
+const deletePost = async (req: Request, res: Response) => {
+  try {
+    await postService.deletePost(req.params.id)
+    res.status(200).json({
+      status: 'success',
+      data: null
+    })
+  } catch (error: any) {
+    res.status(400).json({
+      status: 400,
+      message: error.message || 'Error deletePost'
+    })
+  }
 }
 
 export const postController = {

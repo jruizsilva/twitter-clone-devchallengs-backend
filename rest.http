@@ -27,3 +27,26 @@ Content-Type: application/json
 {
   "content": "test"
 }
+###
+GET  {{BASE_URL}}/posts
+
+###
+POST {{BASE_URL}}/posts
+Content-Type: application/json
+
+{
+  "content": "test"
+}
+###
+GET   {{BASE_URL}}/posts/64a30bbba2ae9a9cc84ee8b4
+
+###
+PATCH  {{BASE_URL}}/posts/64a30bbba2ae9a9cc84ee8b4
+Content-Type: application/json
+
+{
+  "content": "xd"
+}
+
+###
+DELETE  {{BASE_URL}}/posts/64a3034a527c3d7aef4fd67b

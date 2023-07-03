@@ -1,11 +1,22 @@
-import { PostDocument, PostResponse } from '../../models/PostModel'
+import { IPostDocument, IPostResponse } from '../../models/PostModel'
 
 export const postDto = {
-  onePost: (post: PostDocument): PostResponse => {
-    const { _id, ...props } = post
-    return {
-      id: _id,
-      ...props
+  onePost: (docPost: IPostDocument): IPostResponse => {
+    const formatData = {
+      id: docPost._id,
+      ...docPost.toObject()
     }
+    delete formatData._id
+    return formatData
+  },
+  manyPosts: (docPosts: IPostDocument[]): IPostResponse[] => {
+    return docPosts.map((docPost) => {
+      const formatData = {
+        id: docPost._id,
+        ...docPost.toObject()
+      }
+      delete formatData._id
+      return formatData
+    })
   }
 }

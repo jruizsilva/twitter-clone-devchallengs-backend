@@ -1,11 +1,12 @@
-import { PostInput } from './../../models/PostModel'
+import { IPost } from './../../models/PostModel'
 import { postDal } from './postDal'
 
-const getPosts = () => {}
-const getPostById = () => {}
-const addPost = (post: PostInput) => postDal.addPost(post)
-const updatePost = () => {}
-const deletePost = () => {}
+const getPosts = () => postDal.getPosts()
+const getPostById = (postId: string) => postDal.getPostById(postId)
+const addPost = (post: IPost) => postDal.addPost(post)
+const updatePost = (postId: string, data: IPost) =>
+  postDal.updatePost(postId, data)
+const deletePost = (postId: string) => postDal.deletePost(postId)
 
 export const postService = {
   getPosts,

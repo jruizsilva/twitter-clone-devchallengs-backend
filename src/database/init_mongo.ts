@@ -9,6 +9,7 @@ dbConnect()
   .then(() => {
     console.log('Db Connected')
   })
-  .catch(() => {
-    console.log('DB Not connected')
+  .catch((err) => {
+    console.log('MongoDB not connected')
+    console.log(err)
   })

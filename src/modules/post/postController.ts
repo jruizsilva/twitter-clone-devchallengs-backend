@@ -31,10 +31,12 @@ const getPosts = async (req: Request, res: Response) => {
 const getPostById = async (req: Request, res: Response) => {
   try {
     const docPost = await postService.getPostById(req.params.id)
-    console.dir(docPost)
+    if (!docPost) {
+      throw { status: 404, message: 'Post not found' }
+    }
     res.status(200).json({
       status: 'success',
-      data: docPost
+      data: docPost ? postDto.onePost(docPost) : null
     })
   } catch (error: any) {
     res.status(400).json({
